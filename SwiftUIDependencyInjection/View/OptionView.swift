@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct OptionView: View {
-    @StateObject private var viewModel = UserViewModel(apiManager: URLSessionManager(), storage: CoreDataManager.shared)
+    @StateObject private var viewModel = UserViewModel(
+        apiManager: URLSessionManager(),
+        storage: UserDefaultsManager(),
+        parser: UserParser() 
+    )
     
     var body: some View {
         VStack {
             // Crash Button
             Button(action: {
-                
+                // Add your crash testing code here
             }) {
                 Text("Test Crash")
                     .font(.title3)
@@ -28,7 +32,7 @@ struct OptionView: View {
             
             // ScrollView Placeholder
             ScrollView {
-                VStack {
+                VStack(alignment: .leading) { // Aligns the VStack to the leading edge (left)
                     if viewModel.getUsers().isEmpty {
                         Text("No users found")
                             .font(.subheadline)
@@ -38,9 +42,9 @@ struct OptionView: View {
                         let users = viewModel.getUsers()
                         ForEach(users.compactMap { $0.id != nil ? $0 : nil }, id: \.id) { user in
                             Text("Username: \(user.username ?? "")")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                                .font(.title)
                                 .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading) // Aligns the text to the left
                         }
                     }
                 }

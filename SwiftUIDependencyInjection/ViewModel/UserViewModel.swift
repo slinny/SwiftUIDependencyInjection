@@ -12,11 +12,14 @@ class UserViewModel: ObservableObject {
     @Published private(set) var users: [User] = []
     private var apiManager: NetworkSession
     private var storage: UserStorage
+    private let parser: UserParser // Add a parser property
     
     init(apiManager: NetworkSession,
-         storage: UserStorage) {
+         storage: UserStorage,
+         parser: UserParser) { // Inject parser in initializer
         self.apiManager = apiManager
         self.storage = storage
+        self.parser = parser
         loadUsers()
     }
     
@@ -27,14 +30,15 @@ class UserViewModel: ObservableObject {
                 return
             }
             
-            guard let decodedData = try? JSONDecoder().decode([User].self, from: data) else {
-                print("Error: \(URLError.cannotDecodeRawData)")
-                return
+            if let decodedData = self.parser.parseUsers(from: data) {
+                DispatchQueue.main.async {
+                    self.users = decodedData
+                    self.storage.saveUsers(self.users)
+                    self.loadUsers()
+                }
+            } else {
+                print("Error: Failed to parse user data")
             }
-            
-            self.users = decodedData
-            self.storage.saveUsers(self.users)
-            self.loadUsers()
         }
     }
     
@@ -54,3 +58,4 @@ class UserViewModel: ObservableObject {
         self.users = storage.loadUsers()
     }
 }
+

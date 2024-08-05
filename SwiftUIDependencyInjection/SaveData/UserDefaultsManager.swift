@@ -9,31 +9,45 @@ import Foundation
 
 class UserDefaultsManager: UserStorage {
     private let userDefaults = UserDefaults.standard
-    private let userKey = "userKey"
+    private let userKeyPrefix = "user_"
     
     func saveUsers(_ users: [User]) {
-        do {
-            let data = try JSONEncoder().encode(users)
-            userDefaults.set(data, forKey: userKey)
-        } catch {
-            print("Failed to encode users: \(error.localizedDescription)")
+        guard let firstUser = users.first else {
+            deleteUsers() // Optionally, clear existing data if no users are provided
+            return
         }
+        
+        _ = userKeyPrefix + "0"
+        userDefaults.set(firstUser.id, forKey: userKeyPrefix + "id")
+        userDefaults.set(firstUser.name, forKey: userKeyPrefix + "name")
+        userDefaults.set(firstUser.username, forKey: userKeyPrefix + "username")
+        userDefaults.set(firstUser.email, forKey: userKeyPrefix + "email")
+        userDefaults.set(firstUser.phone, forKey: userKeyPrefix + "phone")
     }
     
     func loadUsers() -> [User] {
-        guard let data = userDefaults.data(forKey: userKey) else { return [] }
-        do {
-            let users = try JSONDecoder().decode([User].self, from: data)
-            return users
-        } catch {
-            print("Failed to decode users: \(error.localizedDescription)")
+        guard
+            let id = userDefaults.value(forKey: userKeyPrefix + "id") as? Int,
+            let name = userDefaults.string(forKey: userKeyPrefix + "name"),
+            let username = userDefaults.string(forKey: userKeyPrefix + "username"),
+            let email = userDefaults.string(forKey: userKeyPrefix + "email"),
+            let phone = userDefaults.string(forKey: userKeyPrefix + "phone")
+        else {
             return []
         }
+        
+        let user = User(id: id, name: name, username: username, email: email, phone: phone)
+        return [user]
     }
     
     func deleteUsers() {
-        userDefaults.removeObject(forKey: userKey)
+        userDefaults.removeObject(forKey: userKeyPrefix + "id")
+        userDefaults.removeObject(forKey: userKeyPrefix + "name")
+        userDefaults.removeObject(forKey: userKeyPrefix + "username")
+        userDefaults.removeObject(forKey: userKeyPrefix + "email")
+        userDefaults.removeObject(forKey: userKeyPrefix + "phone")
     }
 }
+
 
 
