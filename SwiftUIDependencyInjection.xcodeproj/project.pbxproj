@@ -76,7 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				936C629E2C56CAE8003E7D7F /* SwiftUIDependencyInjectionApp.swift */,
-				93A2E1B62C614D95005EC7CD /* Utility */,
+				93A2E1B62C614D95005EC7CD /* Parsing */,
 				936C62D02C57449A003E7D7F /* ViewModel */,
 				936C62CF2C574493003E7D7F /* Model */,
 				936C62CE2C57448B003E7D7F /* View */,
@@ -158,12 +158,12 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
-		93A2E1B62C614D95005EC7CD /* Utility */ = {
+		93A2E1B62C614D95005EC7CD /* Parsing */ = {
 			isa = PBXGroup;
 			children = (
 				93A2E1B72C614DA9005EC7CD /* UserParser.swift */,
 			);
-			path = Utility;
+			path = Parsing;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
