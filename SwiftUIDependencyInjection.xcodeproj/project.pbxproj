@@ -75,8 +75,8 @@
 		936C629D2C56CAE8003E7D7F /* SwiftUIDependencyInjection */ = {
 			isa = PBXGroup;
 			children = (
-				93A2E1B62C614D95005EC7CD /* Utility */,
 				936C629E2C56CAE8003E7D7F /* SwiftUIDependencyInjectionApp.swift */,
+				93A2E1B62C614D95005EC7CD /* Utility */,
 				936C62D02C57449A003E7D7F /* ViewModel */,
 				936C62CF2C574493003E7D7F /* Model */,
 				936C62CE2C57448B003E7D7F /* View */,

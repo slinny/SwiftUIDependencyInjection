@@ -11,27 +11,18 @@ import CoreData
 class CoreDataManager: UserStorage {
     static let shared = CoreDataManager()
 
-    let persistentContainer: NSPersistentContainer
-
-    private init() {
-        persistentContainer = NSPersistentContainer(name: "YourDataModelName") // Replace with your .xcdatamodeld file name
-        persistentContainer.loadPersistentStores { (description, error) in
-            if let error = error {
-                fatalError("Unable to load persistent stores: \(error)")
-            }
-        }
-    }
+    private init() {}
 
     var context: NSManagedObjectContext {
-        return persistentContainer.viewContext
+        return PersistenceController.shared.container.viewContext
     }
 
     func saveUsers(_ users: [User]) {
-        let context = persistentContainer.viewContext
+        let context = self.context
 
         // Remove all existing users
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserEntity.fetchRequest() as! NSFetchRequest<NSFetchRequestResult>
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        let fetchRequest: NSFetchRequest<UserEntity> = UserEntity.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest as! NSFetchRequest<NSFetchRequestResult>)
         do {
             try context.execute(deleteRequest)
         } catch {
@@ -56,7 +47,7 @@ class CoreDataManager: UserStorage {
     }
 
     func loadUsers() -> [User] {
-        let context = persistentContainer.viewContext
+        let context = self.context
         let fetchRequest: NSFetchRequest<UserEntity> = UserEntity.fetchRequest()
         do {
             let userEntities = try context.fetch(fetchRequest)
@@ -68,8 +59,8 @@ class CoreDataManager: UserStorage {
     }
 
     func deleteUsers() {
-        let context = persistentContainer.viewContext
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserEntity.fetchRequest() as! NSFetchRequest<NSFetchRequestResult>
+        let context = self.context
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserEntity.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         do {
             try context.execute(deleteRequest)
@@ -79,8 +70,4 @@ class CoreDataManager: UserStorage {
         }
     }
 }
-
-
-
-
 

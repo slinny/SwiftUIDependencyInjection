@@ -10,8 +10,8 @@ import SwiftUI
 struct OptionView: View {
     @StateObject private var viewModel = UserViewModel(
         apiManager: URLSessionManager(),
-        storage: UserDefaultsManager(),
-        parser: UserParser() 
+        storage: CoreDataManager.shared,
+        parser: UserParser()
     )
     
     var body: some View {
