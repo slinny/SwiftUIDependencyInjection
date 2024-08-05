@@ -8,30 +8,29 @@
 import Foundation
 
 class UserWrapper: NSObject {
-    let user: User
+    let users: [User]
     
-    init(user: User) {
-        self.user = user
+    init(users: [User]) {
+        self.users = users
     }
 }
 
-class CacheManager {
+class CacheManager: UserStorage {
     private let cache = NSCache<NSString, UserWrapper>()
+    private let userKey = "userKey"
     
-    func saveUser(_ user: User, forKey key: String) {
-        let userWrapper = UserWrapper(user: user)
-        cache.setObject(userWrapper, forKey: key as NSString)
+    func saveUsers(_ users: [User]) {
+        let userWrapper = UserWrapper(users: users)
+        cache.setObject(userWrapper, forKey: userKey as NSString)
     }
     
-    func loadUser(forKey key: String) -> User? {
-        return cache.object(forKey: key as NSString)?.user
+    func loadUsers() -> [User] {
+        return cache.object(forKey: userKey as NSString)?.users ?? []
     }
     
-    func removeUser(forKey key: String) {
-        cache.removeObject(forKey: key as NSString)
-    }
-    
-    func removeAllUsers() {
-        cache.removeAllObjects()
+    func deleteUsers() {
+        cache.removeObject(forKey: userKey as NSString)
     }
 }
+
+

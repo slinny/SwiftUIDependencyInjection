@@ -8,10 +8,6 @@
 import Foundation
 import Alamofire
 
-protocol NetworkSession {
-    func fetchData(from urlString: String, completion: @escaping (Data?) -> Void)
-}
-
 class URLSessionManager: NetworkSession {
     private var session: URLSession
     

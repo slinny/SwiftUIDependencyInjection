@@ -7,31 +7,33 @@
 
 import Foundation
 
-class UserDefaultsManager {
+class UserDefaultsManager: UserStorage {
     private let userDefaults = UserDefaults.standard
     private let userKey = "userKey"
     
-    func saveUser(_ user: User) {
+    func saveUsers(_ users: [User]) {
         do {
-            let data = try JSONEncoder().encode(user)
+            let data = try JSONEncoder().encode(users)
             userDefaults.set(data, forKey: userKey)
         } catch {
-            print("Failed to encode user: \(error.localizedDescription)")
+            print("Failed to encode users: \(error.localizedDescription)")
         }
     }
     
-    func loadUser() -> User? {
-        guard let data = userDefaults.data(forKey: userKey) else { return nil }
+    func loadUsers() -> [User] {
+        guard let data = userDefaults.data(forKey: userKey) else { return [] }
         do {
-            let user = try JSONDecoder().decode(User.self, from: data)
-            return user
+            let users = try JSONDecoder().decode([User].self, from: data)
+            return users
         } catch {
-            print("Failed to decode user: \(error.localizedDescription)")
-            return nil
+            print("Failed to decode users: \(error.localizedDescription)")
+            return []
         }
     }
     
-    func deleteUser() {
+    func deleteUsers() {
         userDefaults.removeObject(forKey: userKey)
     }
 }
+
+

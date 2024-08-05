@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class CoreDataManager {
+class CoreDataManager: UserStorage {
     static let shared = CoreDataManager()
 
     let persistentContainer: NSPersistentContainer
@@ -26,54 +26,61 @@ class CoreDataManager {
         return persistentContainer.viewContext
     }
 
-    func saveContext() {
+    func saveUsers(_ users: [User]) {
         let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
+
+        // Remove all existing users
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserEntity.fetchRequest() as! NSFetchRequest<NSFetchRequestResult>
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try context.execute(deleteRequest)
+        } catch {
+            print("Failed to delete existing users: \(error)")
+        }
+
+        // Add new users
+        for user in users {
+            let userEntity = UserEntity(context: context)
+            userEntity.id = Int64(user.id ?? 0)
+            userEntity.name = user.name
+            userEntity.username = user.username
+            userEntity.email = user.email
+            userEntity.phone = user.phone
+        }
+
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save users to Core Data: \(error)")
         }
     }
 
-    // CRUD Operations for UserEntity
-    func createUser(id: Int, name: String, username: String, email: String, phone: String) {
-        let userEntity = UserEntity(context: context)
-        userEntity.id = Int64(id)
-        userEntity.name = name
-        userEntity.username = username
-        userEntity.email = email
-        userEntity.phone = phone
-
-        saveContext()
-    }
-
-    func fetchUsers() -> [UserEntity] {
+    func loadUsers() -> [User] {
+        let context = persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<UserEntity> = UserEntity.fetchRequest()
         do {
-            return try context.fetch(fetchRequest)
+            let userEntities = try context.fetch(fetchRequest)
+            return userEntities.map { User(id: Int($0.id), name: $0.name, username: $0.username, email: $0.email, phone: $0.phone) }
         } catch {
-            print("Failed to fetch users: \(error)")
+            print("Failed to fetch users from Core Data: \(error)")
             return []
         }
     }
 
-    func updateUser(user: UserEntity, name: String, username: String, email: String, phone: String) {
-        user.name = name
-        user.username = username
-        user.email = email
-        user.phone = phone
-
-        saveContext()
-    }
-
-    func deleteUser(user: UserEntity) {
-        context.delete(user)
-        saveContext()
+    func deleteUsers() {
+        let context = persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserEntity.fetchRequest() as! NSFetchRequest<NSFetchRequestResult>
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try context.execute(deleteRequest)
+            try context.save()
+        } catch {
+            print("Failed to delete users from Core Data: \(error)")
+        }
     }
 }
+
+
 
 
 
