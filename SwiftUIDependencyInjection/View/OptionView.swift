@@ -16,20 +16,6 @@ struct OptionView: View {
     
     var body: some View {
         VStack {
-            // Crash Button
-            Button(action: {
-                // Add your crash testing code here
-            }) {
-                Text("Test Crash")
-                    .font(.title3)
-                    .bold()
-            }
-            .frame(width: 300, height: 50)
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(20)
-            .padding()
-            
             // ScrollView Placeholder
             ScrollView {
                 VStack(alignment: .leading) { // Aligns the VStack to the leading edge (left)

@@ -76,15 +76,16 @@
 			isa = PBXGroup;
 			children = (
 				936C629E2C56CAE8003E7D7F /* SwiftUIDependencyInjectionApp.swift */,
-				93A2E1B62C614D95005EC7CD /* Parsing */,
-				936C62D02C57449A003E7D7F /* ViewModel */,
-				936C62CF2C574493003E7D7F /* Model */,
-				936C62CE2C57448B003E7D7F /* View */,
-				936C62D12C5744C0003E7D7F /* Common */,
-				936C62D22C5744E3003E7D7F /* Network */,
-				936C62D32C5744F6003E7D7F /* SaveData */,
 				936C62A22C56CAE9003E7D7F /* Assets.xcassets */,
+				936C62D12C5744C0003E7D7F /* Common */,
+				936C62CF2C574493003E7D7F /* Model */,
+				936C62D22C5744E3003E7D7F /* Networking */,
+				93A2E1B62C614D95005EC7CD /* Parsing */,
 				936C62A42C56CAE9003E7D7F /* Preview Content */,
+				936C62D32C5744F6003E7D7F /* SaveData */,
+				93A2E1B92C6158D3005EC7CD /* Utilities */,
+				936C62CE2C57448B003E7D7F /* View */,
+				936C62D02C57449A003E7D7F /* ViewModel */,
 			);
 			path = SwiftUIDependencyInjection;
 			sourceTree = "<group>";
@@ -130,12 +131,12 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
-		936C62D22C5744E3003E7D7F /* Network */ = {
+		936C62D22C5744E3003E7D7F /* Networking */ = {
 			isa = PBXGroup;
 			children = (
 				936C62B22C56DECD003E7D7F /* NetworkSession.swift */,
 			);
-			path = Network;
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		936C62D32C5744F6003E7D7F /* SaveData */ = {
@@ -164,6 +165,13 @@
 				93A2E1B72C614DA9005EC7CD /* UserParser.swift */,
 			);
 			path = Parsing;
+			sourceTree = "<group>";
+		};
+		93A2E1B92C6158D3005EC7CD /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
